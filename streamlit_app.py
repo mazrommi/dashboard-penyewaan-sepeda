@@ -2,9 +2,10 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import streamlit as st
 
 #Sidebar
-st.sidebar.image("/workspaces/dashboard-penyewaan-sepeda/Penyewaan Sepeda.png", use_container_width=True)
+st.sidebar.image("images/PenyewaanSepeda.png", use_container_width=True)
 st.sidebar.title("Pilih Pertanyaan")
 # Placeholder untuk dropdown
 option = st.sidebar.selectbox(
