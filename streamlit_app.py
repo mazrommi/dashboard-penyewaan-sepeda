@@ -67,12 +67,12 @@ filtered_data = cleaned_day_data[
 ]
 
 # Menampilkan data yang telah difilter
-st.write("### Data Setelah Filter Berdasarkan Tanggal")
+st.write("### Data Setelah di Filter Berdasarkan Tanggal")
 st.write(filtered_data.head())
 
 # visualisasi setelah filtering
 if not filtered_data.empty:
-    st.write("### Visualisasi Setelah Filter")
+    st.write("### Visualisasi Setelah di Filter berdasarkan tanggal")
     fig = plt.figure(figsize=(16, 8))
     plt.plot(filtered_data['dteday'], filtered_data['cnt'], label='Total Count', color='blue', linewidth=2)
     plt.title('Total Count Over Selected Dates', fontsize=18)
