@@ -4,8 +4,15 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
 
+# Memuat data dari file di direktori
+file_path = 'cleaned_day_data.csv'
+cleaned_day_data = pd.read_csv(file_path)
+
+#lakukan konversi kolom 'dteday' menjadi tipe data datetime
+cleaned_day_data['dteday'] = pd.to_datetime(cleaned_day_data['dteday'])
+
 #Sidebar
-st.sidebar.image("images/PenyewaanSepeda.png", use_container_width=True)
+st.sidebar.image("https://github.com/mazrommi/dashboard-penyewaan-sepeda/blob/main/images/PenyewaanSepeda.png?raw=true", use_container_width=True)
 st.write("")
 # Placeholder untuk dropdown
 option = st.sidebar.selectbox(
@@ -16,6 +23,24 @@ option = st.sidebar.selectbox(
     ]
 )
 
+st.sidebar.markdown("### Filter Berdasarkan Tanggal")
+min_date = cleaned_day_data['dteday'].min()
+max_date = cleaned_day_data['dteday'].max()
+
+start_date = st.sidebar.date_input(
+    "Pilih Tanggal Awal:",
+    value=min_date,
+    min_value=min_date,
+    max_value=max_date
+)
+
+end_date = st.sidebar.date_input(
+    "Pilih Tanggal Akhir:",
+    value=max_date,
+    min_value=min_date,
+    max_value=max_date
+)
+
 # Judul aplikasi
 st.markdown("""
     <h2 style="text-align: center;">Aplikasi Laporan Penyewaan Sepeda</h2>
@@ -24,17 +49,43 @@ st.markdown("""
     <h4 style="text-align: center;">Aplikasi ini menganalisis pengaruh musim dan kondisi cuaca terhadap jumlah penyewaan sepeda.</h4>
     """,unsafe_allow_html=True)
 
-# Memuat data dari file di direktori
-file_path = 'cleaned_day_data.csv'
-cleaned_day_data = pd.read_csv(file_path)
 
 # Menampilkan data
 st.write("")
 st.write("### Dataset : Bike Sharing Dataset")
 st.write(cleaned_day_data.head())
 
-#lakukan konversi kolom 'dteday' menjadi tipe data datetime
-cleaned_day_data['dteday'] = pd.to_datetime(cleaned_day_data['dteday'])
+
+# Validasi rentang tanggal
+if start_date > end_date:
+    st.sidebar.error("Tanggal awal tidak boleh lebih besar dari tanggal akhir.")
+
+# Filter data berdasarkan tanggal yang dipilih
+filtered_data = cleaned_day_data[
+    (cleaned_day_data['dteday'] >= pd.to_datetime(start_date)) &
+    (cleaned_day_data['dteday'] <= pd.to_datetime(end_date))
+]
+
+# Menampilkan data yang telah difilter
+st.write("### Data Setelah Filter Berdasarkan Tanggal")
+st.write(filtered_data.head())
+
+# visualisasi setelah filtering
+if not filtered_data.empty:
+    st.write("### Visualisasi Setelah Filter")
+    fig = plt.figure(figsize=(16, 8))
+    plt.plot(filtered_data['dteday'], filtered_data['cnt'], label='Total Count', color='blue', linewidth=2)
+    plt.title('Total Count Over Selected Dates', fontsize=18)
+    plt.xlabel('Date', fontsize=14)
+    plt.ylabel('Total Count', fontsize=14)
+    plt.xticks(rotation=45, fontsize=12)
+    plt.grid(alpha=0.5)
+    plt.legend(fontsize=14)
+    plt.tight_layout()
+    st.pyplot(fig)
+else:
+    st.write("Data tidak ditemukan untuk rentang tanggal yang dipilih.")
+
 
 # Visualisasi tren waktu berdasarkan kolom 'dteday' (bulanan)
 cleaned_day_data['month'] = cleaned_day_data['dteday'].dt.to_period('M')
