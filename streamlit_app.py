@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 #Sidebar
-st.sidebar.image("/workspaces/dashboard-penyewaan-sepeda/Penyewaan Sepeda.png", use_container_width=True)
+st.sidebar.image("/Penyewaan Sepeda.png", use_container_width=True)
 st.sidebar.title("Pilih Pertanyaan")
 # Placeholder untuk dropdown
 option = st.sidebar.selectbox(
