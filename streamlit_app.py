@@ -6,7 +6,7 @@ import streamlit as st
 
 #Sidebar
 st.sidebar.image("images/PenyewaanSepeda.png", use_container_width=True)
-st.sidebar.title("Pilih Pertanyaan")
+st.write("")
 # Placeholder untuk dropdown
 option = st.sidebar.selectbox(
     "Pilih pertanyaan untuk analisis:",
